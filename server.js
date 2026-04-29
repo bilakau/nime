@@ -1,6 +1,6 @@
-import "dotenv/config"; // <-- Baris ini otomatis membaca file .env
+import "dotenv/config"; // <-- Otomatis membaca file .env
 import express from "express";
-import mysql from "mysql2/promise";
+import { createClient } from "@supabase/supabase-js";
 import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -44,16 +44,27 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname)));
 
 // ==========================================
-// 1. KONEKSI DATABASE MYSQL DARI .ENV
+// 1. KONEKSI SUPABASE DARI .ENV
 // ==========================================
-const db = mysql.createPool({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    database: process.env.DB_NAME,
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0,
+// Untuk operasi backend (insert/update/delete) gunakan SERVICE_ROLE key,
+// karena anon key dibatasi oleh Row Level Security (RLS).
+// Anon key dipakai sebagai fallback agar dev cepat (RLS harus dimatikan).
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_KEY =
+    process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_KEY;
+
+if (!SUPABASE_URL || !SUPABASE_KEY) {
+    console.error(
+        "🚨 SUPABASE_URL atau SUPABASE_KEY belum di-set. Cek file .env.",
+    );
+    process.exit(1);
+}
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
+    auth: {
+        persistSession: false,
+        autoRefreshToken: false,
+    },
 });
 
 // ==========================================
@@ -61,15 +72,19 @@ const db = mysql.createPool({
 // ==========================================
 app.get("/api/test-db", async (req, res) => {
     try {
-        const [rows] = await db.query(
-            "SELECT 'Koneksi ke MaouAnime DB Berhasil!' AS pesan",
-        );
-        res.json({ status: "success", data: rows[0] });
+        const { error } = await supabase
+            .from("users")
+            .select("id", { count: "exact", head: true });
+        if (error) throw error;
+        res.json({
+            status: "success",
+            data: { pesan: "Koneksi ke MaouAnime Supabase Berhasil!" },
+        });
     } catch (error) {
         console.error("Database error:", error);
         res.status(500).json({
             status: "error",
-            message: "Gagal konek ke database",
+            message: "Gagal konek ke Supabase",
             error: error.message,
         });
     }
@@ -80,11 +95,14 @@ app.post("/api/register", async (req, res) => {
         const { username, email, password } = req.body;
 
         // Cek apakah email atau username sudah dipakai
-        const [existingUser] = await db.query(
-            "SELECT id FROM users WHERE email = ? OR username = ?",
-            [email, username],
-        );
-        if (existingUser.length > 0) {
+        const { data: existingUsers, error: checkError } = await supabase
+            .from("users")
+            .select("id")
+            .or(`email.eq.${email},username.eq.${username}`)
+            .limit(1);
+        if (checkError) throw checkError;
+
+        if (existingUsers && existingUsers.length > 0) {
             return res.status(400).json({
                 status: "error",
                 message: "Email atau Username sudah terdaftar!",
@@ -96,15 +114,14 @@ app.post("/api/register", async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, salt);
 
         // Simpan ke database
-        await db.query(
-            "INSERT INTO users (username, email, password) VALUES (?, ?, ?)",
-            [username, email, hashedPassword],
-        );
+        const { error: insertError } = await supabase
+            .from("users")
+            .insert({ username, email, password: hashedPassword });
+        if (insertError) throw insertError;
+
         res.json({ status: "success", message: "Registrasi berhasil!" });
     } catch (error) {
-        // 👇 TAMBAHKAN BARIS INI UNTUK MELIHAT PENYAKIT ASLINYA 👇
         console.error("🚨 ERROR DETAIL REGISTRASI:", error);
-
         res.status(500).json({
             status: "error",
             message: "Server error saat registrasi.",
@@ -118,16 +135,18 @@ app.post("/api/login", async (req, res) => {
         const { email, password } = req.body;
 
         // Cari user berdasarkan email
-        const [users] = await db.query("SELECT * FROM users WHERE email = ?", [
-            email,
-        ]);
-        if (users.length === 0) {
+        const { data: user, error: findError } = await supabase
+            .from("users")
+            .select("*")
+            .eq("email", email)
+            .maybeSingle();
+        if (findError) throw findError;
+
+        if (!user) {
             return res
                 .status(400)
                 .json({ status: "error", message: "Email tidak ditemukan!" });
         }
-
-        const user = users[0];
 
         // Cocokkan password
         const validPassword = await bcrypt.compare(password, user.password);
@@ -156,6 +175,7 @@ app.post("/api/login", async (req, res) => {
             },
         });
     } catch (error) {
+        console.error("🚨 ERROR DETAIL LOGIN:", error);
         res.status(500).json({
             status: "error",
             message: "Server error saat login.",
@@ -190,12 +210,15 @@ const authenticateToken = (req, res, next) => {
 // Ambil Semua Bookmark User
 app.get("/api/bookmarks", authenticateToken, async (req, res) => {
     try {
-        const [rows] = await db.query(
-            "SELECT * FROM bookmarks WHERE user_id = ? ORDER BY created_at DESC",
-            [req.user.id],
-        );
-        res.json({ status: "success", data: rows });
+        const { data, error } = await supabase
+            .from("bookmarks")
+            .select("*")
+            .eq("user_id", req.user.id)
+            .order("created_at", { ascending: false });
+        if (error) throw error;
+        res.json({ status: "success", data: data || [] });
     } catch (error) {
+        console.error("🚨 ERROR DETAIL BOOKMARKS:", error);
         res.status(500).json({
             status: "error",
             message: "Gagal mengambil bookmark.",
@@ -206,12 +229,19 @@ app.get("/api/bookmarks", authenticateToken, async (req, res) => {
 // Cek Status Bookmark (Apakah anime ini sudah di-bookmark?)
 app.get("/api/bookmarks/check/:slug", authenticateToken, async (req, res) => {
     try {
-        const [rows] = await db.query(
-            "SELECT id FROM bookmarks WHERE user_id = ? AND anime_slug = ?",
-            [req.user.id, req.params.slug],
-        );
-        res.json({ status: "success", isBookmarked: rows.length > 0 });
+        const { data, error } = await supabase
+            .from("bookmarks")
+            .select("id")
+            .eq("user_id", req.user.id)
+            .eq("anime_slug", req.params.slug)
+            .limit(1);
+        if (error) throw error;
+        res.json({
+            status: "success",
+            isBookmarked: !!(data && data.length > 0),
+        });
     } catch (error) {
+        console.error("🚨 ERROR DETAIL CHECK BOOKMARK:", error);
         res.status(500).json({ status: "error", message: "Gagal cek status." });
     }
 });
@@ -220,17 +250,23 @@ app.get("/api/bookmarks/check/:slug", authenticateToken, async (req, res) => {
 app.post("/api/bookmarks/toggle", authenticateToken, async (req, res) => {
     try {
         const { anime_slug, anime_title, anime_thumb } = req.body;
-        const [existing] = await db.query(
-            "SELECT id FROM bookmarks WHERE user_id = ? AND anime_slug = ?",
-            [req.user.id, anime_slug],
-        );
+        const { data: existing, error: checkError } = await supabase
+            .from("bookmarks")
+            .select("id")
+            .eq("user_id", req.user.id)
+            .eq("anime_slug", anime_slug)
+            .limit(1);
+        if (checkError) throw checkError;
 
-        if (existing.length > 0) {
+        if (existing && existing.length > 0) {
             // Jika sudah ada, maka HAPUS
-            await db.query(
-                "DELETE FROM bookmarks WHERE user_id = ? AND anime_slug = ?",
-                [req.user.id, anime_slug],
-            );
+            const { error: deleteError } = await supabase
+                .from("bookmarks")
+                .delete()
+                .eq("user_id", req.user.id)
+                .eq("anime_slug", anime_slug);
+            if (deleteError) throw deleteError;
+
             res.json({
                 status: "success",
                 message: "Dihapus dari My List",
@@ -238,10 +274,16 @@ app.post("/api/bookmarks/toggle", authenticateToken, async (req, res) => {
             });
         } else {
             // Jika belum ada, maka TAMBAH
-            await db.query(
-                "INSERT INTO bookmarks (user_id, anime_slug, anime_title, anime_thumb) VALUES (?, ?, ?, ?)",
-                [req.user.id, anime_slug, anime_title, anime_thumb],
-            );
+            const { error: insertError } = await supabase
+                .from("bookmarks")
+                .insert({
+                    user_id: req.user.id,
+                    anime_slug,
+                    anime_title,
+                    anime_thumb,
+                });
+            if (insertError) throw insertError;
+
             res.json({
                 status: "success",
                 message: "Berhasil disimpan ke My List",
@@ -249,6 +291,7 @@ app.post("/api/bookmarks/toggle", authenticateToken, async (req, res) => {
             });
         }
     } catch (error) {
+        console.error("🚨 ERROR DETAIL TOGGLE BOOKMARK:", error);
         res.status(500).json({
             status: "error",
             message: "Gagal memproses bookmark.",
@@ -263,12 +306,16 @@ app.post("/api/bookmarks/toggle", authenticateToken, async (req, res) => {
 // Ambil Riwayat Nonton User
 app.get("/api/history", authenticateToken, async (req, res) => {
     try {
-        const [rows] = await db.query(
-            "SELECT * FROM watch_history WHERE user_id = ? ORDER BY updated_at DESC LIMIT 20",
-            [req.user.id],
-        );
-        res.json({ status: "success", data: rows });
+        const { data, error } = await supabase
+            .from("watch_history")
+            .select("*")
+            .eq("user_id", req.user.id)
+            .order("updated_at", { ascending: false })
+            .limit(20);
+        if (error) throw error;
+        res.json({ status: "success", data: data || [] });
     } catch (error) {
+        console.error("🚨 ERROR DETAIL HISTORY:", error);
         res.status(500).json({
             status: "error",
             message: "Gagal mengambil riwayat.",
@@ -276,7 +323,6 @@ app.get("/api/history", authenticateToken, async (req, res) => {
     }
 });
 
-// Simpan/Update Riwayat Nonton
 // Simpan atau Update Riwayat Nonton
 app.post("/api/history", authenticateToken, async (req, res) => {
     try {
@@ -288,41 +334,52 @@ app.post("/api/history", authenticateToken, async (req, res) => {
             episode_title,
         } = req.body;
 
-        // 1. CARI BERDASARKAN ANIME_SLUG (Bukan episode_slug)
-        // Ini supaya satu anime cuma punya satu baris di history per user
-        const [existing] = await db.query(
-            "SELECT id FROM watch_history WHERE user_id = ? AND anime_slug = ?",
-            [req.user.id, anime_slug],
-        );
+        // 1. Cari berdasarkan anime_slug (bukan episode_slug)
+        // supaya satu anime cuma punya satu baris di history per user
+        const { data: existing, error: checkError } = await supabase
+            .from("watch_history")
+            .select("id")
+            .eq("user_id", req.user.id)
+            .eq("anime_slug", anime_slug)
+            .limit(1);
+        if (checkError) throw checkError;
 
-        if (existing.length > 0) {
-            // 2. JIKA SUDAH ADA, UPDATE KE EPISODE TERBARU & UPDATE POSTER
-            await db.query(
-                "UPDATE watch_history SET anime_thumb = ?, episode_slug = ?, episode_title = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?",
-                [anime_thumb, episode_slug, episode_title, existing[0].id],
-            );
+        if (existing && existing.length > 0) {
+            // 2. Jika sudah ada, update ke episode terbaru & update poster
+            const { error: updateError } = await supabase
+                .from("watch_history")
+                .update({
+                    anime_thumb,
+                    episode_slug,
+                    episode_title,
+                    updated_at: new Date().toISOString(),
+                })
+                .eq("id", existing[0].id);
+            if (updateError) throw updateError;
+
             return res.json({
                 status: "success",
                 message: "Riwayat diperbarui",
             });
-        } else {
-            // 3. JIKA BELUM ADA, BARU INSERT DATA BARU
-            await db.query(
-                "INSERT INTO watch_history (user_id, anime_slug, anime_title, anime_thumb, episode_slug, episode_title) VALUES (?, ?, ?, ?, ?, ?)",
-                [
-                    req.user.id,
-                    anime_slug,
-                    anime_title,
-                    anime_thumb,
-                    episode_slug,
-                    episode_title,
-                ],
-            );
-            return res.json({
-                status: "success",
-                message: "Riwayat baru ditambahkan",
-            });
         }
+
+        // 3. Jika belum ada, insert data baru
+        const { error: insertError } = await supabase
+            .from("watch_history")
+            .insert({
+                user_id: req.user.id,
+                anime_slug,
+                anime_title,
+                anime_thumb,
+                episode_slug,
+                episode_title,
+            });
+        if (insertError) throw insertError;
+
+        return res.json({
+            status: "success",
+            message: "Riwayat baru ditambahkan",
+        });
     } catch (error) {
         console.error("🚨 DETAIL ERROR HISTORY:", error);
         res.status(500).json({
@@ -335,11 +392,14 @@ app.post("/api/history", authenticateToken, async (req, res) => {
 // Hapus Semua Riwayat Nonton User
 app.delete("/api/history", authenticateToken, async (req, res) => {
     try {
-        await db.query("DELETE FROM watch_history WHERE user_id = ?", [
-            req.user.id,
-        ]);
+        const { error } = await supabase
+            .from("watch_history")
+            .delete()
+            .eq("user_id", req.user.id);
+        if (error) throw error;
         res.json({ status: "success", message: "Riwayat berhasil dihapus!" });
     } catch (error) {
+        console.error("🚨 ERROR DETAIL DELETE HISTORY:", error);
         res.status(500).json({
             status: "error",
             message: "Gagal menghapus riwayat.",
@@ -354,10 +414,11 @@ app.use((req, res) => {
 });
 
 // ==========================================
-// 4. JALANKAN SERVER
+// 5. JALANKAN SERVER
 // ==========================================
 app.listen(PORT, () => {
     console.log(`-------------------------------------------`);
     console.log(`🚀 MaouAnime API & Web live at http://localhost:${PORT}`);
+    console.log(`📦 Database: Supabase (${SUPABASE_URL})`);
     console.log(`-------------------------------------------`);
 });
