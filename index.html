@@ -1,0 +1,999 @@
+<!doctype html>
+<html lang="id">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+        />
+        <meta name="referrer" content="no-referrer" />
+        <title>MaouAnime - Nonton Anime Sub Indo Gratis & Cepat</title>
+        <meta
+            name="description"
+            content="Nonton streaming anime subtitle Indonesia gratis, update setiap hari, tanpa iklan pop-up mengganggu. Tersedia resolusi 360p, 480p, 720p."
+        />
+        <meta
+            name="keywords"
+            content="nonton anime gratis, anime sub indo, streaming anime, MaouAnime, Maou anime, download anime batch"
+        />
+        <meta name="author" content="MaouAnime" />
+        <meta
+            property="og:image"
+            content="/img/og-image.png"
+        />
+        <meta
+            property="og:title"
+            content="MaouAnime - Nonton Anime Sub Indo Gratis & Cepat"
+        />
+        <meta
+            property="og:description"
+            content="Nonton streaming anime subtitle Indonesia gratis, update setiap hari, tanpa iklan pop-up mengganggu. Tersedia resolusi 360p, 480p, 720p."
+        />
+        <meta property="og:url" content="/" />
+        <meta property="og:type" content="website" />
+
+        <link rel="icon" type="image/x-icon" href="/favicon.ico?v=2" />
+        <link rel="shortcut icon" href="/favicon.ico?v=2" />
+
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+        />
+
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#121212" />
+        <link rel="apple-touch-icon" href="/img/icon-192.png?v=2" />
+
+        <link rel="stylesheet" href="/css/style.css" />
+
+        <style>
+            @keyframes slideUp {
+                from {
+                    transform: translateY(100%);
+                }
+                to {
+                    transform: translateY(0);
+                }
+            }
+            .animate-slideUp {
+                animation: slideUp 0.3s ease-out forwards;
+            }
+            @keyframes slideDown {
+                from {
+                    opacity: 0;
+                    transform: translateY(-10px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+            .animate-slideDown {
+                animation: slideDown 0.3s ease-out forwards;
+            }
+        </style>
+
+        <!-- Google tag (gtag.js) -->
+        <script
+            async
+            src="https://www.googletagmanager.com/gtag/js?id=G-F3R256S1H4"
+        ></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+                dataLayer.push(arguments);
+            }
+            gtag("js", new Date());
+
+            gtag("config", "G-F3R256S1H4");
+        </script>
+
+        <script type="importmap">
+            {
+                "imports": {
+                    "/js/config.js": "/js/config.js?v=2",
+                    "/js/api.js": "/js/api.js?v=2",
+                    "/js/auth.js": "/js/auth.js?v=3.1",
+                    "/js/home.js": "/js/home.js?v=3.1",
+                    "/js/detail.js": "/js/detail.js?v=3.8",
+                    "/js/player.js": "/js/player.js?v=4.3",
+                    "/js/schedule.js": "/js/schedule.js?v=3.1",
+                    "/js/genres.js": "/js/genres.js?v=3.1",
+                    "/js/batch.js": "/js/batch.js?v=3.1",
+                    "/js/mylist.js": "/js/mylist.js?v=3.1",
+                    "/js/history.js": "/js/history.js?v=3.1",
+                    "/js/profile.js": "/js/profile.js?v=3.1",
+                    "/js/donate.js": "/js/donate.js?v=3.1",
+                    "/js/admin.js": "/js/admin.js?v=3.1",
+                    "/js/gacha.js": "/js/gacha.js?v=2.1"
+                }
+            }
+        </script>
+    </head>
+    <body class="bg-[#0b0b0b] text-white">
+        <nav class="sticky top-0 z-50 glass border-b border-gray-800/50 p-3">
+            <div class="container mx-auto relative px-4 md:px-10 lg:px-20">
+                <div class="flex flex-row justify-between items-center gap-3">
+                    <a
+                        href="/"
+                        class="flex items-center gap-2 cursor-pointer anime-link"
+                    >
+                        <div
+                            class="w-8 h-8 bg-[#ff6600] rounded-lg flex items-center justify-center shadow-lg shadow-[#ff6600]/20"
+                        >
+                            <i class="fas fa-play text-white text-xs"></i>
+                        </div>
+                        <h1
+                            class="text-xl font-black tracking-tighter uppercase"
+                        >
+                            Maou<span class="text-[#ff6600]">Anime</span>
+                        </h1>
+                    </a>
+
+                    <div class="flex items-center gap-4 ml-auto md:hidden">
+                        <a
+                            href="/gacha"
+                            title="Gacha Anime!"
+                            class="vtuber-mascot-btn anime-link mr-1 scale-90"
+                        >
+                            <img
+                                src="/img/vtuber_gacha_v2.png"
+                                class="vtuber-mascot-img"
+                                alt="Mascot"
+                            />
+                        </a>
+                        <button
+                            id="mobile-search-toggle"
+                            class="text-gray-400 hover:text-[#ff6600] text-lg focus:outline-none transition"
+                        >
+                            <i class="fas fa-search"></i>
+                        </button>
+                        <button
+                            id="mobile-menu-btn"
+                            class="text-gray-400 hover:text-[#ff6600] text-xl focus:outline-none transition"
+                        >
+                            <i class="fas fa-bars"></i>
+                        </button>
+                    </div>
+
+                    <div
+                        class="hidden md:flex gap-5 text-[10px] font-bold items-center tracking-wider overflow-x-auto no-scrollbar py-1"
+                    >
+                        <a
+                            href="/"
+                            class="text-gray-300 hover:text-[#ff6600] font-['Poppins'] font-semibold text-[10px] md:text-xs tracking-wide transition-all anime-link"
+                            >Home</a
+                        >
+                        <a
+                            href="/ongoing"
+                            class="text-gray-300 hover:text-[#ff6600] font-['Poppins'] font-semibold text-[10px] md:text-xs tracking-wide transition-all anime-link"
+                            >Ongoing</a
+                        >
+                        <a
+                            href="/complete"
+                            class="text-gray-300 hover:text-[#ff6600] font-['Poppins'] font-semibold text-[10px] md:text-xs tracking-wide transition-all flex items-center gap-1 anime-link"
+                        >
+                            <i class="far fa-check-square text-[8px]"></i>
+                            Complete
+                        </a>
+                        <a
+                            href="/schedule"
+                            class="text-gray-300 hover:text-[#ff6600] font-['Poppins'] font-semibold text-[10px] md:text-xs tracking-wide transition-all flex items-center gap-1 anime-link"
+                        >
+                            <i class="far fa-calendar-alt text-[8px]"></i>
+                            Schedule
+                        </a>
+                        <a
+                            href="/genres"
+                            class="text-gray-300 hover:text-[#ff6600] font-['Poppins'] font-semibold text-[10px] md:text-xs tracking-wide transition-all flex items-center gap-1 anime-link"
+                        >
+                            <i class="fas fa-ghost text-[8px]"></i> Genres
+                        </a>
+                        <a
+                            href="/mylist"
+                            class="text-gray-300 hover:text-[#ff6600] font-['Poppins'] font-semibold text-[10px] md:text-xs tracking-wide transition-all flex items-center gap-1 anime-link"
+                        >
+                            <i class="fas fa-heart text-[8px]"></i> My List
+                        </a>
+                        <a
+                            href="/history"
+                            class="text-gray-300 hover:text-[#ff6600] font-['Poppins'] font-semibold text-[10px] md:text-xs tracking-wide transition-all flex items-center gap-1 anime-link"
+                        >
+                            <i class="fas fa-history text-[8px]"></i> History
+                        </a>
+
+                        <div class="vtuber-gacha-container">
+                            <a
+                                href="/gacha"
+                                title="Gacha Anime!"
+                                class="vtuber-mascot-btn ml-2 anime-link"
+                            >
+                                <img
+                                    src="/img/vtuber_gacha_v2.png"
+                                    class="vtuber-mascot-img"
+                                    alt="Mascot"
+                                />
+                            </a>
+                        </div>
+
+                        <div class="relative ml-2 flex items-center">
+                            <button
+                                id="desktop-search-toggle"
+                                class="text-gray-400 hover:text-[#ff6600] text-sm focus:outline-none transition-colors p-2"
+                            >
+                                <i class="fas fa-search"></i>
+                            </button>
+
+                            <!-- DESKTOP SEARCH POPUP (FLOATING) -->
+                            <div
+                                id="desktop-search-container"
+                                class="hidden fixed left-1/2 -translate-x-1/2 top-20 w-full max-w-xl bg-[#1a1a1a]/95 backdrop-blur-md border border-gray-800 rounded-2xl shadow-2xl p-4 z-[100] animate-slideDown"
+                            >
+                                <div class="relative group">
+                                    <input
+                                        type="text"
+                                        id="search-input-desktop"
+                                        placeholder="Ketik judul anime..."
+                                        class="bg-gray-900/50 border border-gray-700/50 rounded-xl px-12 py-3 text-sm outline-none focus:border-[#ff6600] focus:ring-1 focus:ring-[#ff6600]/20 w-full text-white transition-all placeholder:text-gray-600"
+                                    />
+                                    <i
+                                        class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-[#ff6600] transition-colors"
+                                    ></i>
+                                    <div
+                                        class="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2"
+                                    >
+                                        <span
+                                            class="text-[10px] text-gray-600 font-bold uppercase tracking-widest px-2 py-1 bg-gray-800/50 rounded-md border border-gray-700/50"
+                                            >ESC</span
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="nav-user-controls" class="ml-4">
+                            <button
+                                id="nav-login-btn"
+                                class="bg-gray-800 hover:bg-[#ff6600] border border-gray-700 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest transition shadow-sm"
+                            >
+                                <i class="fas fa-sign-in-alt mr-1"></i> Login
+                            </button>
+
+                            <a
+                                id="nav-profile-section"
+                                href="/profile"
+                                class="hidden items-center gap-3 cursor-pointer group anime-link"
+                            >
+                                <span
+                                    id="nav-user-name"
+                                    class="hidden lg:block text-[10px] font-black uppercase tracking-widest text-gray-300 group-hover:text-[#ff6600] transition-colors"
+                                    >Username</span
+                                >
+                                <div
+                                    id="nav-user-avatar"
+                                    class="w-8 h-8 rounded-full overflow-hidden border-2 border-gray-800 group-hover:border-[#ff6600] transition-all bg-gray-800 flex items-center justify-center"
+                                ></div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    id="mobile-dropdown"
+                    class="hidden md:hidden absolute top-14 right-0 w-48 bg-[#1a1a1a] border border-gray-800 rounded-2xl shadow-2xl z-[100] flex-col overflow-hidden transition-all text-[10px] font-bold tracking-widest"
+                >
+                    <a
+                        href="/"
+                        class="py-3 px-5 text-gray-300 hover:bg-gray-800 hover:text-white border-b border-gray-800 anime-link"
+                    >
+                        <i class="fas fa-home w-5 text-center mr-1"></i> Home
+                    </a>
+                    <a
+                        href="/ongoing"
+                        class="py-3 px-5 text-gray-300 hover:bg-gray-800 hover:text-white border-b border-gray-800 anime-link"
+                    >
+                        <i class="fas fa-play-circle w-5 text-center mr-1"></i>
+                        Ongoing
+                    </a>
+                    <a
+                        href="/complete"
+                        class="py-3 px-5 text-gray-300 hover:bg-gray-800 hover:text-white border-b border-gray-800 anime-link"
+                    >
+                        <i class="fas fa-check-circle w-5 text-center mr-1"></i>
+                        Complete
+                    </a>
+                    <a
+                        href="/schedule"
+                        class="py-3 px-5 text-gray-300 hover:bg-gray-800 hover:text-white border-b border-gray-800 anime-link"
+                    >
+                        <i class="far fa-calendar-alt w-5 text-center mr-1"></i>
+                        Schedule
+                    </a>
+                    <a
+                        href="/genres"
+                        class="py-3 px-5 text-gray-300 hover:bg-gray-800 hover:text-white border-b border-gray-800 anime-link"
+                    >
+                        <i class="fas fa-ghost w-5 text-center mr-1"></i> Genres
+                    </a>
+                    <a
+                        href="/mylist"
+                        class="py-3 px-5 text-gray-300 hover:bg-gray-800 hover:text-white border-b border-gray-800 anime-link"
+                    >
+                        <i
+                            class="fas fa-heart w-5 text-center mr-1 text-[#ff6600]"
+                        ></i>
+                        My List
+                    </a>
+                    <a
+                        href="/history"
+                        class="py-3 px-5 text-gray-300 hover:bg-gray-800 hover:text-white border-b border-gray-800 anime-link"
+                    >
+                        <i
+                            class="fas fa-history w-5 text-center mr-1 text-[#ff6600]"
+                        ></i>
+                        History
+                    </a>
+                    <a
+                        href="/gacha"
+                        class="mobile-gacha-mascot-item anime-link"
+                    >
+                        <div class="flex flex-col">
+                            <span
+                                class="text-[9px] text-white/50 font-bold uppercase mb-1"
+                                >Surprise!</span
+                            >
+                            <span class="mobile-gacha-text text-xl"
+                                >GACHA ANIME</span
+                            >
+                        </div>
+                        <img
+                            src="/img/vtuber_gacha_v2.png"
+                            class="mobile-gacha-img"
+                            alt="Mascot"
+                        />
+                    </a>
+                    <a
+                        href="/donate"
+                        class="py-3 px-5 text-gray-300 hover:bg-gray-800 hover:text-white border-b border-gray-800 anime-link"
+                    >
+                        <i
+                            class="fas fa-donate w-5 text-center mr-1 text-[#ff6600]"
+                        ></i>
+                        Donate
+                    </a>
+                    <div id="nav-user-controls-mobile">
+                        <button
+                            id="nav-login-btn-mobile"
+                            class="w-full text-left text-[#ff6600] py-3 px-5 hover:bg-gray-800 transition"
+                        >
+                            <i
+                                class="fas fa-sign-in-alt w-5 text-center mr-1"
+                            ></i>
+                            Login
+                        </button>
+
+                        <div
+                            id="nav-profile-section-mobile"
+                            class="hidden flex-col"
+                        >
+                            <a
+                                href="/profile"
+                                class="py-3 px-5 text-white bg-gray-800/50 flex items-center gap-3 border-b border-gray-800 anime-link"
+                            >
+                                <div
+                                    id="nav-user-avatar-mobile"
+                                    class="w-7 h-7 rounded-full overflow-hidden bg-[#ff6600] flex items-center justify-center"
+                                ></div>
+                                <span
+                                    id="nav-user-name-mobile"
+                                    class="font-black uppercase tracking-tighter"
+                                    >My Profile</span
+                                >
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    id="mobile-search-container"
+                    class="hidden mt-3 md:hidden transition-all duration-300 animate-slideDown"
+                >
+                    <div class="relative w-full flex gap-2">
+                        <input
+                            type="text"
+                            id="search-input-mobile"
+                            placeholder="Cari anime..."
+                            class="bg-gray-900/50 border border-gray-800 rounded-xl px-4 py-2.5 text-xs outline-none focus:border-[#ff6600] w-full text-white transition"
+                        />
+                        <button
+                            onclick="window.app.handleSearch()"
+                            class="bg-[#ff6600] hover:bg-[#e65c00] text-white px-4 rounded-xl text-xs transition shadow-lg shadow-[#ff6600]/20"
+                        >
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <main
+            class="container mx-auto px-4 md:px-6 pt-6 pb-16 md:pb-6 animate-fadeIn"
+        >
+            <div id="loading" class="hidden py-40 text-center">
+                <div
+                    class="inline-block w-10 h-10 border-4 border-[#ff6600] border-t-transparent rounded-full animate-spin"
+                ></div>
+            </div>
+            <div id="content-display"></div>
+        </main>
+
+        <nav
+            class="fixed-bottom-mobile bg-[#0b0b0b]/95 backdrop-blur-md border-t border-gray-800 md:hidden"
+        >
+            <div class="flex justify-between items-center px-1 py-2">
+                <a
+                    href="/"
+                    class="flex flex-col items-center p-2 flex-1 text-gray-500 hover:text-[#ff6600] group transition-colors anime-link"
+                >
+                    <i class="fas fa-home text-[18px] mb-1"></i>
+                    <span class="text-[8px] font-black uppercase tracking-wider"
+                        >Home</span
+                    >
+                </a>
+
+                <a
+                    href="/ongoing"
+                    class="flex flex-col items-center p-2 flex-1 text-gray-500 hover:text-[#ff6600] group transition-colors anime-link"
+                >
+                    <i class="fas fa-play-circle text-[18px] mb-1"></i>
+                    <span class="text-[8px] font-black uppercase tracking-wider"
+                        >Ongoing</span
+                    >
+                </a>
+
+                <a
+                    href="/schedule"
+                    class="flex flex-col items-center p-2 flex-1 text-gray-500 hover:text-[#ff6600] group transition-colors anime-link"
+                >
+                    <i class="fas fa-calendar-alt text-[18px] mb-1"></i>
+                    <span class="text-[8px] font-black uppercase tracking-wider"
+                        >Schedule</span
+                    >
+                </a>
+
+                <a
+                    href="/mylist"
+                    class="flex flex-col items-center p-2 flex-1 text-gray-500 hover:text-[#ff6600] group transition-colors anime-link"
+                >
+                    <i class="fas fa-heart text-[18px] mb-1"></i>
+                    <span class="text-[8px] font-black uppercase tracking-wider"
+                        >My List</span
+                    >
+                </a>
+
+                <a
+                    href="/history"
+                    class="flex flex-col items-center p-2 flex-1 text-gray-500 hover:text-[#ff6600] group transition-colors anime-link"
+                >
+                    <i class="fas fa-history text-[18px] mb-1"></i>
+                    <span class="text-[8px] font-black uppercase tracking-wider"
+                        >History</span
+                    >
+                </a>
+            </div>
+        </nav>
+
+        <script type="module">
+            import {
+                showAuthModal,
+                handleLogin,
+                handleRegister,
+                checkAuthUI,
+            } from "/js/auth.js";
+            import { loadHome, loadCategory, handleSearch } from "/js/home.js";
+            import { loadDetail, toggleEpisodeSort } from "/js/detail.js";
+            import {
+                loadPlayer,
+                switchServer,
+                changeQuality,
+                loadOtakudesuServers,
+                loadAnimasuServers,
+            } from "/js/player.js";
+            import { loadSchedule } from "/js/schedule.js";
+            import { loadGenres } from "/js/genres.js";
+            import { loadBatch } from "/js/batch.js";
+            import { loadMyList } from "/js/mylist.js";
+            import { loadHistory, clearHistory } from "/js/history.js";
+            import { loadProfile } from "/js/profile.js";
+            import { loadDonate } from "/js/donate.js";
+            import {
+                loadAdminDashboard,
+                fetchAdminStats,
+                editUserByAdmin,
+            } from "/js/admin.js";
+            import { gachaAnime } from "/js/gacha.js";
+
+            const navigateTo = (path, extraData = null) => {
+                history.pushState(extraData, null, path);
+                router();
+            };
+
+            if (typeof gtag === "function") {
+                gtag("config", "G-F3R256S1H4", {
+                    page_path:
+                        window.location.pathname + window.location.search,
+                });
+            }
+
+            const router = async () => {
+                const path = window.location.pathname;
+                const params = new URLSearchParams(window.location.search);
+                const page = parseInt(params.get("page")) || 1;
+                const query = params.get("q");
+
+                if (path === "/search" && query) {
+                    const mobileInput = document.getElementById(
+                        "search-input-mobile",
+                    );
+                    if (mobileInput) mobileInput.value = query;
+                    await handleSearch();
+                }
+
+                if (path === "/" || path === "/home") {
+                    document.title =
+                        "MaouAnime - Nonton Anime Sub Indo Gratis & Cepat";
+                    await loadHome();
+                } else if (path === "/ongoing") {
+                    document.title = "Ongoing Anime Terbaru - MaouAnime";
+                    await loadCategory("ongoing", page);
+                } else if (path === "/complete") {
+                    document.title = "Daftar Anime Tamat - MaouAnime";
+                    await loadCategory("complete", page);
+                } else if (path === "/schedule") {
+                    document.title = "Jadwal Rilis Anime - MaouAnime";
+                    await loadSchedule();
+                } else if (path === "/genres") await loadGenres();
+                else if (path === "/mylist") await loadMyList();
+                else if (path === "/history") await loadHistory();
+                else if (path === "/profile") await loadProfile();
+                else if (path === "/donate") await loadDonate();
+                else if (path === "/gacha") await gachaAnime();
+                else if (path === "/admin") await loadAdminDashboard();
+                else if (path.startsWith("/anime/")) {
+                    const slug = path.split("/")[2];
+                    const extra = history.state || {};
+                    await loadDetail(slug, extra.thumb, extra.title);
+                } else if (path.startsWith("/episode/"))
+                    await loadPlayer(path.split("/")[2]);
+                else if (path.startsWith("/genres/"))
+                    await loadGenres(path.split("/")[2]);
+                else if (path.startsWith("/batch/"))
+                    await loadBatch(path.split("/")[2]);
+            };
+
+            window.app = {
+                showAuthModal,
+                handleLogin,
+                handleRegister,
+                navigateTo,
+                loadCategory,
+                handleSearch,
+                loadDetail,
+                loadPlayer,
+                switchServer,
+                changeQuality,
+                loadOtakudesuServers,
+                loadAnimasuServers,
+                loadSchedule,
+                loadGenres,
+                loadBatch,
+                loadMyList,
+                loadHistory,
+                clearHistory,
+                loadProfile,
+                loadDonate,
+                loadAdminDashboard,
+                fetchAdminStats,
+                editUserByAdmin,
+                gachaAnime,
+                toggleEpisodeSort,
+            };
+
+            // Intercept klik pada link internal untuk menjaga mode SPA
+            document.addEventListener("click", (e) => {
+                const link = e.target.closest(".anime-link");
+                if (link) {
+                    const href = link.getAttribute("href");
+                    // Hanya intercept jika link internal dan bukan klik kanan/ctrl-klik
+                    if (
+                        href &&
+                        href.startsWith("/") &&
+                        !e.ctrlKey &&
+                        !e.metaKey &&
+                        !e.shiftKey &&
+                        e.button === 0
+                    ) {
+                        e.preventDefault();
+
+                        // Ekstrak data tambahan jika ada (untuk fallback detail)
+                        const thumb = link.getAttribute("data-thumb");
+                        const title = link.getAttribute("data-title");
+
+                        navigateTo(href, { thumb, title });
+
+                        // Tutup menu mobile jika link diklik
+                        const dropdown =
+                            document.getElementById("mobile-dropdown");
+                        const menuBtn =
+                            document.getElementById("mobile-menu-btn");
+                        if (
+                            dropdown &&
+                            !dropdown.classList.contains("hidden")
+                        ) {
+                            dropdown.classList.add("hidden");
+                            dropdown.classList.remove("flex");
+                            const icon = menuBtn?.querySelector("i");
+                            if (icon)
+                                icon.classList.replace("fa-times", "fa-bars");
+                        }
+                    }
+                }
+            });
+
+            // LOGIKA MENU HAMBURGER MOBILE
+            const menuBtn = document.getElementById("mobile-menu-btn");
+            const dropdown = document.getElementById("mobile-dropdown");
+
+            if (menuBtn && dropdown) {
+                menuBtn.addEventListener("click", () => {
+                    dropdown.classList.toggle("hidden");
+                    dropdown.classList.toggle("flex");
+
+                    const icon = menuBtn.querySelector("i");
+                    if (dropdown.classList.contains("hidden")) {
+                        icon.classList.replace("fa-times", "fa-bars");
+                    } else {
+                        icon.classList.replace("fa-bars", "fa-times");
+                    }
+                });
+
+                // Tutup otomatis kalau user klik di luar menu
+                document.addEventListener("click", (e) => {
+                    if (
+                        !menuBtn.contains(e.target) &&
+                        !dropdown.contains(e.target)
+                    ) {
+                        dropdown.classList.add("hidden");
+                        dropdown.classList.remove("flex");
+                        menuBtn
+                            .querySelector("i")
+                            .classList.replace("fa-times", "fa-bars");
+                    }
+                });
+            }
+
+            window.addEventListener("DOMContentLoaded", () => {
+                const path = window.location.pathname;
+                checkAuthUI();
+                router();
+                const searchToggleBtn = document.getElementById(
+                    "mobile-search-toggle",
+                );
+                const searchContainer = document.getElementById(
+                    "mobile-search-container",
+                );
+                const searchInputMobile = document.getElementById(
+                    "search-input-mobile",
+                );
+
+                let searchTimeout; // Variabel untuk menyimpan timer hantu
+
+                // Fungsi untuk mulai/reset hitung mundur 5 detik
+                const startSearchTimer = () => {
+                    clearTimeout(searchTimeout); // Hapus timer lama
+                    if (!searchContainer.classList.contains("hidden")) {
+                        searchTimeout = setTimeout(() => {
+                            searchContainer.classList.add("hidden"); // Tutup otomatis setelah 5 detik
+                        }, 10000);
+                    }
+                };
+
+                if (searchToggleBtn && searchContainer) {
+                    searchToggleBtn.addEventListener("click", (e) => {
+                        searchContainer.classList.toggle("hidden");
+
+                        if (!searchContainer.classList.contains("hidden")) {
+                            setTimeout(() => searchInputMobile.focus(), 100);
+                            startSearchTimer(); // Mulai hitungan 5 detik saat dibuka
+                        } else {
+                            clearTimeout(searchTimeout); // Matikan timer jika ditutup manual
+                        }
+                    });
+                }
+
+                if (searchInputMobile) {
+                    // Kalau user lagi ngetik, timer 5 detiknya di-reset biar nggak tiba-tiba ketutup
+                    searchInputMobile.addEventListener(
+                        "input",
+                        startSearchTimer,
+                    );
+                    searchInputMobile.addEventListener(
+                        "click",
+                        startSearchTimer,
+                    );
+
+                    // Eksekusi saat Enter
+                    searchInputMobile.addEventListener(
+                        "keypress",
+                        function (e) {
+                            if (e.key === "Enter") {
+                                window.app.handleSearch();
+                                searchContainer.classList.add("hidden");
+                                clearTimeout(searchTimeout);
+                            }
+                        },
+                    );
+                }
+
+                // ==========================================
+                // 3. AUTO-CLOSE SAAT KLIK LUAR / GANTI HALAMAN
+                // ==========================================
+                document.addEventListener("click", (e) => {
+                    if (
+                        searchContainer &&
+                        !searchContainer.classList.contains("hidden")
+                    ) {
+                        // Jika yang diklik BUKAN kotak search dan BUKAN tombol ikon kaca pembesar
+                        if (
+                            !searchContainer.contains(e.target) &&
+                            !searchToggleBtn.contains(e.target)
+                        ) {
+                            searchContainer.classList.add("hidden"); // Langsung tutup!
+                            clearTimeout(searchTimeout);
+                        }
+                    }
+                });
+            });
+
+            // LOGIKA SEARCH DESKTOP (POPUP)
+            document.addEventListener("DOMContentLoaded", () => {
+                const desktopSearchToggle = document.getElementById(
+                    "desktop-search-toggle",
+                );
+                const desktopSearchContainer = document.getElementById(
+                    "desktop-search-container",
+                );
+                const desktopSearchInput = document.getElementById(
+                    "search-input-desktop",
+                );
+
+                if (desktopSearchToggle && desktopSearchContainer) {
+                    desktopSearchToggle.addEventListener("click", (e) => {
+                        e.stopPropagation();
+                        desktopSearchContainer.classList.toggle("hidden");
+                        if (
+                            !desktopSearchContainer.classList.contains("hidden")
+                        ) {
+                            setTimeout(() => desktopSearchInput.focus(), 100);
+                        }
+                    });
+
+                    // Tutup saat klik luar
+                    document.addEventListener("click", (e) => {
+                        if (
+                            !desktopSearchContainer.contains(e.target) &&
+                            !desktopSearchToggle.contains(e.target)
+                        ) {
+                            desktopSearchContainer.classList.add("hidden");
+                        }
+                    });
+
+                    // Tutup saat tekan Escape
+                    document.addEventListener("keydown", (e) => {
+                        if (e.key === "Escape") {
+                            desktopSearchContainer.classList.add("hidden");
+                        }
+                    });
+                }
+            });
+
+            window.addEventListener("popstate", router);
+
+            // Sinkronisasi Search
+            document.getElementById("search-input-mobile").onkeypress = (e) => {
+                if (e.key === "Enter") {
+                    document.getElementById("search-input-desktop").value =
+                        e.target.value;
+                    app.handleSearch();
+                }
+            };
+
+            document.getElementById("search-input-desktop").onkeypress = (
+                e,
+            ) => {
+                if (e.key === "Enter") {
+                    document.getElementById("search-input-mobile").value =
+                        e.target.value;
+                    app.handleSearch();
+                }
+            };
+        </script>
+
+        <script>
+            if ("serviceWorker" in navigator) {
+                window.addEventListener("load", () => {
+                    navigator.serviceWorker
+                        .register("/sw.js")
+                        .then((reg) =>
+                            console.log(
+                                "🔥 MaouAnime PWA Active! Scope:",
+                                reg.scope,
+                            ),
+                        )
+                        .catch((err) =>
+                            console.error("❌ PWA gagal di-load:", err),
+                        );
+                });
+            }
+        </script>
+
+        <footer class="bg-[#121212] border-t border-gray-800 pt-6 pb-8 mt-6">
+            <div class="container mx-auto px-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
+                    <div class="space-y-6">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-8 h-8 bg-[#ff6600] rounded-lg flex items-center justify-center shadow-lg shadow-[#ff6600]/20"
+                            >
+                                <i class="fas fa-play text-white text-xs"></i>
+                            </div>
+                            <span
+                                class="text-2xl font-black tracking-tighter text-white"
+                                >Maou<span class="text-[#ff6600]"
+                                    >ANIME</span
+                                ></span
+                            >
+                        </div>
+                        <p
+                            class="text-gray-400 text-sm leading-relaxed max-w-xs"
+                        >
+                            Platform terbaik untuk streaming anime dengan
+                            kualitas tinggi (HD) dan subtitle Indonesia secara
+                            gratis. Nikmati ribuan episode tanpa gangguan.
+                        </p>
+                    </div>
+
+                    <div>
+                        <h3
+                            class="text-white font-bold mb-6 uppercase tracking-widest text-xs"
+                        >
+                            Quick Links
+                        </h3>
+                        <ul class="space-y-4">
+                            <li>
+                                <a
+                                    href="/ongoing"
+                                    class="text-gray-500 hover:text-[#ff6600] text-sm transition-colors flex items-center gap-2"
+                                    ><i
+                                        class="fas fa-chevron-right text-[10px]"
+                                    ></i>
+                                    Ongoing Anime</a
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    href="/complete"
+                                    class="text-gray-500 hover:text-[#ff6600] text-sm transition-colors flex items-center gap-2"
+                                    ><i
+                                        class="fas fa-chevron-right text-[10px]"
+                                    ></i>
+                                    Completed Series</a
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    href="/schedule"
+                                    class="text-gray-500 hover:text-[#ff6600] text-sm transition-colors flex items-center gap-2"
+                                    ><i
+                                        class="fas fa-chevron-right text-[10px]"
+                                    ></i>
+                                    Jadwal Rilis</a
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    href="/genres"
+                                    class="text-gray-500 hover:text-[#ff6600] text-sm transition-colors flex items-center gap-2"
+                                    ><i
+                                        class="fas fa-chevron-right text-[10px]"
+                                    ></i>
+                                    Daftar Genre</a
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    href="javascript:void(0)"
+                                    onclick="app.loadDonate()"
+                                    class="text-gray-500 hover:text-[#ff6600] text-sm transition-colors flex items-center gap-2"
+                                    ><i
+                                        class="fas fa-chevron-right text-[10px]"
+                                    ></i>
+                                    Support Us</a
+                                >
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h3
+                            class="text-white font-bold mb-6 uppercase tracking-widest text-xs"
+                        >
+                            Popular Genres
+                        </h3>
+                        <div class="flex flex-wrap gap-2">
+                            <button
+                                onclick="app.loadCategory('genres/action', 1)"
+                                class="px-3 py-1.5 bg-gray-900 border border-gray-800 rounded-lg text-xs text-gray-400 hover:border-[#ff6600] hover:text-white cursor-pointer transition-all active:scale-95"
+                            >
+                                Action
+                            </button>
+                            <button
+                                onclick="
+                                    app.loadCategory('genres/adventure', 1)
+                                "
+                                class="px-3 py-1.5 bg-gray-900 border border-gray-800 rounded-lg text-xs text-gray-400 hover:border-[#ff6600] hover:text-white cursor-pointer transition-all active:scale-95"
+                            >
+                                Adventure
+                            </button>
+                            <button
+                                onclick="app.loadCategory('genres/fantasy', 1)"
+                                class="px-3 py-1.5 bg-gray-900 border border-gray-800 rounded-lg text-xs text-gray-400 hover:border-[#ff6600] hover:text-white cursor-pointer transition-all active:scale-95"
+                            >
+                                Fantasy
+                            </button>
+                            <button
+                                onclick="app.loadCategory('genres/romance', 1)"
+                                class="px-3 py-1.5 bg-gray-900 border border-gray-800 rounded-lg text-xs text-gray-400 hover:border-[#ff6600] hover:text-white cursor-pointer transition-all active:scale-95"
+                            >
+                                Romance
+                            </button>
+                            <button
+                                onclick="app.loadCategory('genres/sci-fi', 1)"
+                                class="px-3 py-1.5 bg-gray-900 border border-gray-800 rounded-lg text-xs text-gray-400 hover:border-[#ff6600] hover:text-white cursor-pointer transition-all active:scale-95"
+                            >
+                                Sci-Fi
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="border-t border-gray-900 pt-8 flex flex-col md:row justify-between items-center gap-4"
+                >
+                    <p
+                        class="text-gray-600 text-[11px] font-medium uppercase tracking-wider"
+                    >
+                        © 2026 <span class="text-gray-400">MaouAnime</span>.
+                        All rights reserved.
+                    </p>
+                    <p
+                        class="text-gray-600 text-[11px] font-medium uppercase tracking-wider"
+                    >
+                        Made with
+                        <i class="fas fa-heart text-red-600 mx-1"></i> by Maou
+                        Team
+                    </p>
+                </div>
+            </div>
+        </footer>
+    </body>
+</html>

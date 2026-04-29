@@ -1,0 +1,15 @@
+# https://www.kuzen.my.id/robots.txt
+
+User-agent: *
+Allow: /
+Allow: /anime/
+Allow: /episode/
+Allow: /genres/
+
+# Jangan biarkan bot masuk ke folder sistem atau api secara langsung
+Disallow: /api/
+Disallow: /config.js
+Disallow: /js/utils.js
+
+# Lokasi Peta Situs (Ganti jika nama file sitemap-mu berbeda)
+Sitemap: https://www.kuzen.my.id/sitemap.xml

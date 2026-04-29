@@ -1,0 +1,7 @@
+<IfModule mod_headers.c>
+    # Mengambil Origin dari request secara dinamis dan mengizinkannya
+    SetEnvIf Origin "^(https?://(?:.+\.)?(kuzen\.my\.id|kuzen\.web\.id|localhost:3000))$" ORIGIN_SUBDOMAIN=$0
+    Header set Access-Control-Allow-Origin %{ORIGIN_SUBDOMAIN}e env=ORIGIN_SUBDOMAIN
+    Header set Access-Control-Allow-Methods "GET, POST, OPTIONS, PUT, DELETE"
+    Header set Access-Control-Allow-Headers "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+</IfModule>
