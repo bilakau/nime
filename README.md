@@ -42,10 +42,11 @@ Proyek ini terdiri dari **dua bagian terpisah**:
 
 ```
 ┌────────────────────────────┐         ┌────────────────────────────┐
-│  Frontend (Static SPA)     │  HTTPS  │  Backend (Express + MySQL) │
+│  Frontend (Static SPA)     │  HTTPS  │  Backend (Express)         │
 │  • Hosted di Vercel        │ ──────> │  • Hosted di VPS sendiri   │
 │  • HTML / Vanilla JS / CSS │         │  • api.kuzen.my.id         │
 │  • Tailwind via CDN        │         │  • Auth, Bookmark, History │
+│                            │         │  • DB: Supabase (Postgres) │
 └────────────────────────────┘         └────────────────────────────┘
               │                                      │
               │                                      ▼
@@ -71,7 +72,7 @@ Proyek ini terdiri dari **dua bagian terpisah**:
 
 ### Backend
 - **Node.js 18+** dengan **Express 5**
-- **MySQL 8** (via `mysql2/promise`)
+- **Supabase** (Postgres) via [`@supabase/supabase-js`](https://supabase.com/docs/reference/javascript)
 - **JWT** (`jsonwebtoken`) — token sesi 7 hari
 - **bcrypt** — hashing password (10 rounds)
 - **CORS** — whitelist origin (`kuzen.my.id`, `kuzen.web.id`)
@@ -97,6 +98,10 @@ nime/
 ├── .vercelignore           # File yang tidak diupload ke Vercel
 ├── server.js               # Backend Express (jalan di VPS, BUKAN di Vercel)
 ├── package.json            # Dependency manifest
+├── .env.example            # Template environment vars (copy ke .env)
+├── supabase/
+│   └── migrations/
+│       └── 0001_init_schema.sql   # DDL Postgres untuk Supabase
 ├── css/
 │   └── style.css           # Custom styles + animations
 ├── js/
@@ -138,59 +143,34 @@ npm install
 
 ### 3. Setup Environment Variables
 
-Buat file `.env` di root folder dengan isi:
+```bash
+cp .env.example .env
+```
+
+Lalu edit `.env` dan isi nilai-nilai berikut (lihat juga [Konfigurasi Environment](#-konfigurasi-environment)):
 
 ```env
 PORT=3000
 JWT_SECRET=ganti-dengan-secret-acak-yang-panjang
 
-DB_HOST=localhost
-DB_USER=root
-DB_PASS=
-DB_NAME=maouanime
+SUPABASE_URL=https://your-project-id.supabase.co
+SUPABASE_KEY=your-anon-public-key
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 ```
 
-### 4. Setup Database MySQL
+> 🔑 **Tip:** generate `JWT_SECRET` cepat dengan `openssl rand -hex 64`.
 
-Jalankan SQL berikut di MySQL/MariaDB:
+### 4. Setup Database (Supabase)
 
-```sql
-CREATE DATABASE IF NOT EXISTS maouanime;
-USE maouanime;
+1. Buat project di [https://supabase.com/dashboard](https://supabase.com/dashboard).
+2. Ambil kredensial dari **Project Settings → API**:
+   - `Project URL` → `SUPABASE_URL`
+   - `anon public` → `SUPABASE_KEY`
+   - `service_role` → `SUPABASE_SERVICE_ROLE_KEY` (rahasia! jangan expose di browser)
+3. Buka **SQL Editor** → **New Query**, paste isi file [`supabase/migrations/0001_init_schema.sql`](supabase/migrations/0001_init_schema.sql), jalankan.
+   File ini membuat tabel `users`, `bookmarks`, `watch_history` lengkap dengan indeks, foreign key, dan RLS yang aman untuk pemakaian via `service_role` key.
 
-CREATE TABLE users (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  username VARCHAR(50) UNIQUE NOT NULL,
-  email VARCHAR(100) UNIQUE NOT NULL,
-  password VARCHAR(255) NOT NULL,
-  avatar VARCHAR(255) DEFAULT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE bookmarks (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  user_id INT NOT NULL,
-  anime_slug VARCHAR(255) NOT NULL,
-  anime_title VARCHAR(255) NOT NULL,
-  anime_thumb VARCHAR(500),
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-  UNIQUE KEY unique_bookmark (user_id, anime_slug)
-);
-
-CREATE TABLE watch_history (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  user_id INT NOT NULL,
-  anime_slug VARCHAR(255) NOT NULL,
-  anime_title VARCHAR(255) NOT NULL,
-  anime_thumb VARCHAR(500),
-  episode_slug VARCHAR(255),
-  episode_title VARCHAR(255),
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-  UNIQUE KEY unique_history (user_id, anime_slug)
-);
-```
+> ⚠️ Jika kamu **hanya** punya `anon` key (tanpa `service_role`), backend tidak bisa insert/update/delete dengan RLS aktif. Lihat catatan di akhir file migration untuk men-disable RLS — tapi ini **tidak direkomendasikan** untuk production karena siapa pun yang punya anon key bisa CRUD data user.
 
 ### 5. Jalankan Server
 
@@ -219,14 +199,16 @@ Ganti `USER_API` ke `http://localhost:3000/api` saat development lokal jika perl
 
 ### Backend (`.env`)
 
-| Variabel     | Deskripsi                                  | Contoh                  |
-|--------------|--------------------------------------------|-------------------------|
-| `PORT`       | Port server Express                        | `3000`                  |
-| `JWT_SECRET` | Secret untuk sign JWT (wajib panjang)      | `random-256-bit-string` |
-| `DB_HOST`    | Hostname MySQL                             | `localhost`             |
-| `DB_USER`    | Username MySQL                             | `root`                  |
-| `DB_PASS`    | Password MySQL                             | `password`              |
-| `DB_NAME`    | Nama database                              | `maouanime`             |
+| Variabel                    | Wajib | Deskripsi                                                                 | Contoh                                |
+|-----------------------------|-------|---------------------------------------------------------------------------|---------------------------------------|
+| `PORT`                      |       | Port server Express                                                       | `3000`                                |
+| `JWT_SECRET`                | ✅    | Secret untuk sign JWT (wajib panjang & acak)                              | `openssl rand -hex 64`                |
+| `SUPABASE_URL`              | ✅    | URL project Supabase                                                       | `https://abc.supabase.co`             |
+| `SUPABASE_KEY`              | ✅\*  | Anon (public) key Supabase                                                 | `eyJhbGciOi...`                       |
+| `SUPABASE_SERVICE_ROLE_KEY` | 🔥    | Service role key — **direkomendasikan** untuk backend, bypass RLS         | `eyJhbGciOi...`                       |
+| `SUPABASE_PROJECT_ID`       |       | ID project (informasi saja, tidak dipakai server)                          | `latwvoyphfdjhftgtzym`                |
+
+\* Server akan **prefer** `SUPABASE_SERVICE_ROLE_KEY` jika tersedia; jika tidak, fallback ke `SUPABASE_KEY` (anon).
 
 ---
 
@@ -307,9 +289,20 @@ Pasang reverse-proxy (Nginx / Caddy) dengan SSL (Let's Encrypt) untuk membungkus
 
 **Solusi:** File `.vercelignore` sudah mengecualikan `server.js`. `vercel.json` juga sudah disetel `framework: null` agar tidak ada auto-detection. Re-deploy proyek setelah update.
 
-### `Error: ER_ACCESS_DENIED_ERROR` saat start backend
+### `🚨 SUPABASE_URL atau SUPABASE_KEY belum di-set` saat start backend
 
-Cek kredensial di `.env` dan pastikan user MySQL punya akses ke database.
+Pastikan `.env` ada di root folder dan berisi `SUPABASE_URL` + `SUPABASE_KEY` (atau `SUPABASE_SERVICE_ROLE_KEY`). Jangan commit `.env` ke git — gunakan `.env.example` sebagai template.
+
+### `PGRST205 - Could not find the table 'public.<x>'`
+
+Tabel belum ada di Supabase. Buka **SQL Editor** di dashboard, jalankan [`supabase/migrations/0001_init_schema.sql`](supabase/migrations/0001_init_schema.sql).
+
+### `new row violates row-level security policy` saat register / bookmark
+
+Backend dijalankan dengan **anon key** sementara RLS aktif → setiap insert/update ditolak. Solusi (urut prioritas):
+
+1. **Pakai `SUPABASE_SERVICE_ROLE_KEY`** di `.env` (rekomendasi). Service role bypass RLS.
+2. Atau di Supabase **Authentication → Policies**, matikan RLS pada tabel `users`, `bookmarks`, `watch_history` (kurang aman, lihat catatan di file migration).
 
 ### `CORS error` di browser
 
