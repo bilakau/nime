@@ -1,0 +1,8 @@
+# Backend Express server runs on the user's own VPS (api.kuzen.my.id),
+# NOT on Vercel. Excluding it here prevents Vercel from auto-detecting
+# Express and deploying server.js as a serverless function (which crashes
+# because Vercel functions cannot bind a port via app.listen()).
+server.js
+.env
+.env.*
+node_modules

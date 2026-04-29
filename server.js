@@ -14,17 +14,11 @@ const PORT = process.env.PORT || 3000;
 
 const app = express();
 
-app.use(cors());
-app.use(express.json());
-
-app.use(express.static(path.join(__dirname)));
-
 const allowedOrigins = [
     "http://localhost:3000",
     "https://kuzen.my.id",
     "https://www.kuzen.my.id",
     "https://kuzen.web.id",
-    window.location.origin
 ];
 
 app.use(
@@ -44,6 +38,10 @@ app.use(
         credentials: true, // Penting jika kamu nanti pakai Cookie/Session
     }),
 );
+
+app.use(express.json());
+
+app.use(express.static(path.join(__dirname)));
 
 // ==========================================
 // 1. KONEKSI DATABASE MYSQL DARI .ENV
