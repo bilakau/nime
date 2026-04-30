@@ -4,7 +4,7 @@ import { USER_API, USER_API_BACKUP } from "./config.js";
 import { fetchWithFallback } from "./api.js";
 
 // ==========================================
-// HELPER POPUP TEMA KUZENANIME
+// HELPER POPUP TEMA MAOUANIME
 // ==========================================
 const showPopup = (title, text, icon = "success") => {
   Swal.fire({
@@ -39,7 +39,7 @@ export function showAuthModal(isLogin = true) {
                         <i class="fas ${isLogin ? "fa-lock" : "fa-user-plus"} text-white text-xl"></i>
                     </div>
                     <h2 class="text-2xl font-black uppercase tracking-tighter text-white">${isLogin ? "Welcome Back" : "Join Member"}</h2>
-                    <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-1">${isLogin ? "Login to access your profile" : "Start your journey at KuzenAnime"}</p>
+                    <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-1">${isLogin ? "Login to access your profile" : "Start your journey at MaouAnime"}</p>
                 </div>
 
                 <form id="auth-form" onsubmit="event.preventDefault(); window.app.${isLogin ? "handleLogin()" : "handleRegister()"}">
@@ -49,7 +49,7 @@ export function showAuthModal(isLogin = true) {
                     <div class="mb-4">
                         <label class="block text-[9px] font-black text-gray-500 uppercase tracking-widest mb-2 ml-1">Username</label>
                         <div class="relative"><i class="fas fa-user absolute left-4 top-1/2 -translate-y-1/2 text-gray-600 text-xs"></i>
-                            <input type="text" id="auth-username" required placeholder="KuzenMember" class="w-full bg-gray-900/50 border border-gray-800 rounded-xl py-3 pl-11 pr-4 text-sm text-white focus:border-[#ff6600] focus:outline-none transition-all">
+                            <input type="text" id="auth-username" required placeholder="MaouMember" class="w-full bg-gray-900/50 border border-gray-800 rounded-xl py-3 pl-11 pr-4 text-sm text-white focus:border-[#ff6600] focus:outline-none transition-all">
                         </div>
                     </div>`
                         : ""
@@ -142,8 +142,8 @@ export async function handleLogin() {
     const data = await res.json();
 
     if (data.status === "success") {
-      localStorage.setItem("kuzen_token", data.token);
-      localStorage.setItem("kuzen_user", JSON.stringify(data.user));
+      localStorage.setItem("maounime_token", data.token);
+      localStorage.setItem("maounime_user", JSON.stringify(data.user));
 
       if (document.getElementById("auth-modal"))
         document.getElementById("auth-modal").remove();
@@ -192,8 +192,8 @@ window.handleLogout = () => {
     customClass: { popup: "rounded-3xl border border-gray-800" },
   }).then((result) => {
     if (result.isConfirmed) {
-      localStorage.removeItem("kuzen_token");
-      localStorage.removeItem("kuzen_user");
+      localStorage.removeItem("maounime_token");
+      localStorage.removeItem("maounime_user");
 
       checkAuthUI();
 
@@ -219,7 +219,7 @@ window.handleLogout = () => {
 // 4. RENDER NAVBAR (DENGAN FOTO CLOUDINARY)
 // ==========================================
 export async function checkAuthUI() {
-  const token = localStorage.getItem("kuzen_token");
+  const token = localStorage.getItem("maounime_token");
   const loginBtnDesktop = document.getElementById("nav-login-btn");
   const loginBtnMobile = document.getElementById("nav-login-btn-mobile");
 
@@ -283,7 +283,7 @@ export async function checkAuthUI() {
         }
       } else {
         // Jika token invalid (expired), paksa logout
-        localStorage.removeItem("kuzen_token");
+        localStorage.removeItem("maounime_token");
         checkAuthUI();
       }
     } catch (err) {

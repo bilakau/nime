@@ -231,7 +231,7 @@ export async function loadDetail(slug, thumbFromHome = null, titleFromHome = nul
       .join("");
   }
 
-  document.title = `${title} Sub Indo - KuzenAnime`;
+  document.title = `${title} Sub Indo - MaouAnime`;
 
   // --- EPISODE LIST dari Sanka (episodeList + batch) ---
   // Jika fallback, biasanya list episode sudah urut ascending (lama ke baru)
@@ -431,7 +431,7 @@ export function toggleEpisodeSort() {
 
 // --- FUNGSI BOOKMARK (TETAP SAMA) ---
 async function initBookmarkButton(animeData) {
-  const token = localStorage.getItem("kuzen_token");
+  const token = localStorage.getItem("maounime_token");
   const container = document.getElementById("bookmark-container");
   if (!container) return;
 
@@ -473,7 +473,7 @@ function renderBookmarkButton(isBookmarked, animeData) {
 
 window.handleBookmarkToggle = async (slug, title, thumb) => {
   // 1. Cek apakah user sudah login
-  const token = localStorage.getItem("kuzen_token");
+  const token = localStorage.getItem("maounime_token");
   if (!token) {
     // Jika belum login, panggil modal login
     if (window.app && window.app.showAuthModal) {

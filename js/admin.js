@@ -4,7 +4,7 @@ import { fetchWithFallback } from "./api.js";
 export async function loadAdminDashboard() {
   fetchAdminStats();
   // Keamanan: Cek apakah user benar-benar admin (dari localStorage/token)
-  const user = JSON.parse(localStorage.getItem("kuzen_user"));
+  const user = JSON.parse(localStorage.getItem("maounime_user"));
   if (!user || user.role !== "admin") {
     Swal.fire({
       icon: "error",
@@ -70,7 +70,7 @@ export async function loadAdminDashboard() {
 }
 
 export async function fetchAdminStats() {
-  const token = localStorage.getItem("kuzen_token");
+  const token = localStorage.getItem("maounime_token");
   try {
     const res = await fetchWithFallback("/admin/stats", USER_API, USER_API_BACKUP, {
       headers: { Authorization: `Bearer ${token}` },
@@ -130,7 +130,7 @@ export async function editUserByAdmin(userId) {
       },
     });
 
-    const token = localStorage.getItem("kuzen_token");
+    const token = localStorage.getItem("maounime_token");
     try {
       const res = await fetchWithFallback("/admin/reset-user-password", USER_API, USER_API_BACKUP, {
         method: "PUT",

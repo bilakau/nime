@@ -1,7 +1,7 @@
 {
   "name": "web_anime2",
   "version": "1.0.0",
-  "description": "MaouAnime / KuzenAnime — anime streaming SPA with a Supabase-backed Express API.",
+  "description": "MaouAnime — anime streaming SPA with a Supabase-backed Express API.",
   "main": "index.html",
   "type": "module",
   "scripts": {

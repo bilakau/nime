@@ -973,7 +973,7 @@ function renderIframe(container, src) {
 }
 
 async function saveToHistory(episodeData, animeSlug, epSlug) {
-    const token = localStorage.getItem("kuzen_token");
+    const token = localStorage.getItem("maounime_token");
     if (!token) return;
 
     try {
