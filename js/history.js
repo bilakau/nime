@@ -11,7 +11,7 @@ export async function loadHistory() {
   history.pushState(null, null, "/history");
 
   const content = document.getElementById("content-display");
-  const token = localStorage.getItem("kuzen_token");
+  const token = localStorage.getItem("maounime_token");
 
   // 2. Proteksi: Cek apakah user sudah login (Instan, tanpa skeleton)
   if (!token) {
@@ -141,7 +141,7 @@ export async function loadHistory() {
 }
 
 export async function clearHistory() {
-  const token = localStorage.getItem("kuzen_token");
+  const token = localStorage.getItem("maounime_token");
   if (!token) return;
 
   const result = await Swal.fire({

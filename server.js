@@ -16,9 +16,8 @@ const app = express();
 
 const allowedOrigins = [
     "http://localhost:3000",
-    "https://kuzen.my.id",
-    "https://www.kuzen.my.id",
-    "https://kuzen.web.id",
+    "https://maounime.my.id",
+    "https://www.maounime.my.id",
 ];
 
 app.use(

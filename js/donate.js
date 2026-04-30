@@ -11,7 +11,7 @@ export async function loadDonate() {
   display.innerHTML = `
         <div class="max-w-3xl mx-auto animate-fadeIn px-2">
             <div class="mb-10 text-center md:text-left">
-                <h1 class="text-3xl md:text-4xl font-black text-white tracking-tighter mb-2 uppercase">Support <span class="text-[#ff6600]">KuzenAnime</span></h1>
+                <h1 class="text-3xl md:text-4xl font-black text-white tracking-tighter mb-2 uppercase">Support <span class="text-[#ff6600]">MaouAnime</span></h1>
                 <p class="text-gray-500 text-sm font-medium uppercase tracking-widest">Bantu kami agar tetap bisa melayani kalian setiap hari.</p>
             </div>
 
@@ -19,7 +19,7 @@ export async function loadDonate() {
                 <h3 class="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em] mb-8">Scan QRIS All Payment</h3>
                 
                 <div class="mb-8">
-                    <img src="/img/qris-kuzen.png" 
+                    <img src="/img/qris-maounime.png" 
                          alt="QRIS MaouAnime" 
                          class="w-full max-w-xs mx-auto rounded-2xl shadow-lg border border-gray-800/50" 
                          onerror="this.onerror=null; this.src='https://via.placeholder.com/500x500?text=QRIS+IMAGE+NOT+FOUND';">

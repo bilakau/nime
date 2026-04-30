@@ -1,4 +1,4 @@
-const CACHE_NAME = "kuzen-cache-v5";
+const CACHE_NAME = "maounime-cache-v1";
 
 // Saat di-install, Service Worker langsung aktif tanpa menunggu
 self.addEventListener("install", (event) => {

@@ -1,8 +1,8 @@
-# 🎬 KuzenAnime / MaouAnime
+# 🎬 MaouAnime
 
 Web streaming anime modern bergaya **Single Page Application (SPA)** yang ringan, cepat, dan responsif. Dibangun dengan fokus pada **User Experience (UX)** yang mulus dan optimasi performa tingkat tinggi.
 
-🌐 **Coba Langsung:** [https://kuzen.my.id/](https://kuzen.my.id/)
+🌐 **Coba Langsung:** [https://maounime.my.id/](https://maounime.my.id/)
 
 ---
 
@@ -44,7 +44,7 @@ Proyek ini terdiri dari **dua bagian terpisah**:
 ┌────────────────────────────┐         ┌────────────────────────────┐
 │  Frontend (Static SPA)     │  HTTPS  │  Backend (Express)         │
 │  • Hosted di Vercel        │ ──────> │  • Hosted di VPS sendiri   │
-│  • HTML / Vanilla JS / CSS │         │  • api.kuzen.my.id         │
+│  • HTML / Vanilla JS / CSS │         │  • maounime.my.id         │
 │  • Tailwind via CDN        │         │  • Auth, Bookmark, History │
 │                            │         │  • DB: Supabase (Postgres) │
 └────────────────────────────┘         └────────────────────────────┘
@@ -57,7 +57,7 @@ Proyek ini terdiri dari **dua bagian terpisah**:
                                          └────────────────────────┘
 ```
 
-> ⚠️ **Penting:** `server.js` (backend Express) hanya berjalan di VPS sendiri (`api.kuzen.my.id`). Vercel hanya meng-host frontend statis. Lihat [Deployment](#-deployment) untuk detail.
+> ⚠️ **Penting:** `server.js` (backend Express) hanya berjalan di VPS sendiri (`maounime.my.id`). Vercel hanya meng-host frontend statis. Lihat [Deployment](#-deployment) untuk detail.
 
 ---
 
@@ -75,7 +75,7 @@ Proyek ini terdiri dari **dua bagian terpisah**:
 - **Supabase** (Postgres) via [`@supabase/supabase-js`](https://supabase.com/docs/reference/javascript)
 - **JWT** (`jsonwebtoken`) — token sesi 7 hari
 - **bcrypt** — hashing password (10 rounds)
-- **CORS** — whitelist origin (`kuzen.my.id`, `kuzen.web.id`)
+- **CORS** — whitelist origin (`maounime.my.id`, `maounime.my.id`)
 - **dotenv** — manajemen environment variables
 
 ### External APIs
@@ -191,8 +191,8 @@ Buka [http://localhost:3000](http://localhost:3000) di browser.
 ```js
 export const ANIME_API       = "https://api.kanata.web.id/otakudesu";
 export const SANKA_API       = "https://www.sankavollerei.com/anime";
-export const USER_API        = "https://api.kuzen.my.id/api";
-export const USER_API_BACKUP = "https://apiv1.kuzen.web.id/api";
+export const USER_API        = "https://maounime.my.id/api";
+export const USER_API_BACKUP = "https://maounime.my.id/api";
 ```
 
 Ganti `USER_API` ke `http://localhost:3000/api` saat development lokal jika perlu.
@@ -214,7 +214,7 @@ Ganti `USER_API` ke `http://localhost:3000/api` saat development lokal jika perl
 
 ## 🔌 API Endpoints
 
-Base URL: `https://api.kuzen.my.id/api` (production) atau `http://localhost:3000/api` (local)
+Base URL: `https://maounime.my.id/api` (production) atau `http://localhost:3000/api` (local)
 
 ### Public
 
@@ -259,7 +259,7 @@ Atau hubungkan repo GitHub ke Vercel — auto-deploy setiap `git push`.
 
 ### Backend → VPS Sendiri
 
-Backend (`server.js`) di-host di VPS pribadi (`api.kuzen.my.id`) menggunakan **PM2**:
+Backend (`server.js`) di-host di VPS pribadi (`maounime.my.id`) menggunakan **PM2**:
 
 ```bash
 # Di VPS
@@ -306,7 +306,7 @@ Backend dijalankan dengan **anon key** sementara RLS aktif → setiap insert/upd
 
 ### `CORS error` di browser
 
-Pastikan domain frontend ada di whitelist `allowedOrigins` (`server.js`). Default sudah include `kuzen.my.id`, `kuzen.web.id`, dan `localhost:3000`.
+Pastikan domain frontend ada di whitelist `allowedOrigins` (`server.js`). Default sudah include `maounime.my.id`, `maounime.my.id`, dan `localhost:3000`.
 
 ### Service Worker pakai versi lama
 

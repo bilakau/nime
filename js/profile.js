@@ -3,7 +3,7 @@ import { fetchWithFallback } from "./api.js";
 import { showLoading } from "./utils.js";
 
 export async function loadProfile() {
-  const token = localStorage.getItem("kuzen_token");
+  const token = localStorage.getItem("maounime_token");
 
   // 1. Proteksi Halaman: Usir jika belum login
   if (!token) {
@@ -141,7 +141,7 @@ window.handleImageUpload = async (e) => {
   const file = e.target.files[0];
   if (!file) return;
 
-  const token = localStorage.getItem("kuzen_token");
+  const token = localStorage.getItem("maounime_token");
 
   // Loading Alert
   Swal.fire({
@@ -202,7 +202,7 @@ window.handleImageUpload = async (e) => {
 window.handleUpdateUsername = async (e) => {
   e.preventDefault();
   const newUsername = document.getElementById("input-username").value.trim();
-  const token = localStorage.getItem("kuzen_token");
+  const token = localStorage.getItem("maounime_token");
 
   try {
     showLoading(true);
@@ -251,7 +251,7 @@ window.handleUpdatePassword = async (e) => {
   const confirmPassword = document.getElementById(
     "input-confirm-password",
   ).value;
-  const token = localStorage.getItem("kuzen_token");
+  const token = localStorage.getItem("maounime_token");
 
   // Validasi Frontend
   if (newPassword !== confirmPassword) {
@@ -323,7 +323,7 @@ window.handleLogout = () => {
     color: "#ffffff",
   }).then((result) => {
     if (result.isConfirmed) {
-      localStorage.removeItem("kuzen_token");
+      localStorage.removeItem("maounime_token");
       // Bisa hapus memori lain jika perlu (misal current_anime_slug)
       window.location.href = "/"; // Arahkan kembali ke Home
     }

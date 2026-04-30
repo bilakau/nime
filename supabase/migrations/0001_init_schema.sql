@@ -1,5 +1,5 @@
 -- ==========================================
--- MaouAnime / KuzenAnime — Schema awal Supabase
+-- MaouAnime — Schema awal Supabase
 -- Jalankan di Supabase SQL Editor (Project → SQL Editor → New Query)
 -- atau via `psql` ke connection string Supabase.
 -- ==========================================

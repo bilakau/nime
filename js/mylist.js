@@ -11,7 +11,7 @@ export async function loadMyList() {
   history.pushState(null, null, "/mylist");
 
   const content = document.getElementById("content-display");
-  const token = localStorage.getItem("kuzen_token");
+  const token = localStorage.getItem("maounime_token");
 
   // Jika belum login, arahkan ke login (Instan, tanpa skeleton)
   if (!token) {
@@ -126,7 +126,7 @@ window.deleteBookmark = async (slug) => {
     customClass: { popup: "rounded-3xl" },
   }).then(async (result) => {
     if (result.isConfirmed) {
-      const token = localStorage.getItem("kuzen_token");
+      const token = localStorage.getItem("maounime_token");
       try {
         const res = await fetchWithFallback("/bookmarks/toggle", USER_API, USER_API_BACKUP, {
           method: "POST",
